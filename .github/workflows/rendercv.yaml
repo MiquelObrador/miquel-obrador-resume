@@ -1,12 +1,10 @@
       - name: Render CV
-        run: rendercv render Miquel_Obrador_Reina_CV.yaml
+        run: rendercv render Miquel_Obrador-Reina_CV.yaml # <-- AQUÍ ESTABA EL ERROR SEGURAMENTE
         
       - name: Prepare Pages directory
         run: |
           mkdir -p pages_output
-          # Copia el PDF desde la carpeta de salida de RenderCV
           cp rendercv_output/*.pdf pages_output/
-          # Copia tu index.html a la carpeta de salida
           cp index.html pages_output/
           
       - name: Setup Pages
