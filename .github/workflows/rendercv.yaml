@@ -1,40 +1,22 @@
-name: Render and Deploy CV
-on:
-  push:
-    branches:
-      - main
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
-        
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          
-      - name: Install RenderCV
-        run: uv pip install --system "rendercv[full]"
-        
       - name: Render CV
         run: rendercv render Miquel_Obrador_Reina_CV.yaml
         
+      - name: Prepare Pages directory
+        run: |
+          mkdir -p pages_output
+          # Copia el PDF desde la carpeta de salida de RenderCV
+          cp rendercv_output/*.pdf pages_output/
+          # Copia tu index.html a la carpeta de salida
+          cp index.html pages_output/
+          
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # RenderCV por defecto genera el output en la carpeta rendercv_output
-          path: rendercv_output 
+          # Ahora subimos la carpeta que hemos preparado con ambos archivos
+          path: pages_output 
 
       - name: Deploy to GitHub Pages
         id: deployment
