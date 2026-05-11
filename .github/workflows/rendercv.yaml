@@ -34,8 +34,8 @@ jobs:
       - name: Prepare Pages directory
         run: |
           mkdir -p pages_output
-          cp rendercv_output/*.pdf pages_output/CV.pdf
-          cp index.html pages_output/
+          cp -r rendercv_output/* pages_output/
+          cp rendercv_output/*.html pages_output/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
