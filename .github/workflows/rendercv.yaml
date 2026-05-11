@@ -1,20 +1,49 @@
+name: Render and Deploy CV
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  rendercv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install RenderCV
+        run: |
+          python -m pip install --upgrade pip
+          pip install rendercv
+
       - name: Render CV
-        run: rendercv render Miquel_Obrador-Reina_CV.yaml # <-- AQUÍ ESTABA EL ERROR SEGURAMENTE
-        
+        run: rendercv render Miquel_Obrador_Reina_CV.yaml
+
       - name: Prepare Pages directory
         run: |
           mkdir -p pages_output
           cp rendercv_output/*.pdf pages_output/
           cp index.html pages_output/
-          
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Ahora subimos la carpeta que hemos preparado con ambos archivos
-          path: pages_output 
+          path: pages_output
 
       - name: Deploy to GitHub Pages
         id: deployment
